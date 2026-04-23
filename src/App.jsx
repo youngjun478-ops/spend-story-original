@@ -1,1 +1,2 @@
-// 👉 여기에 내가 이전에 준 App.jsx 전체 코드 붙여넣으면 된다.
+export default function ViralMVP() {
+  export default ViralMVP;
