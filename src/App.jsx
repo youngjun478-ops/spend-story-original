@@ -191,11 +191,36 @@ function App() {
   const [category, setCategory] = useState("cafe");
   const [situation, setSituation] = useState("혼자");
   const [reacted, setReacted] = useState(null);
+  const [savedRecords, setSavedRecords] = useState([
+    {
+      id: 1,
+      amount: "5500",
+      category: "cafe",
+      situation: "혼자",
+      title: "커피를 마신 게 아니라, 잠깐 앉아 있고 싶었다",
+      subtitle: "혼자 있는 시간이 필요했던 날은 메뉴보다 자리가 더 중요하다.",
+      date: new Date().toISOString(),
+    },
+  ]);
 
   const result = useMemo(
     () => buildResult(category, situation, amount),
     [category, situation, amount]
   );
+
+  function handleSave() {
+    const newItem = {
+      id: Date.now(),
+      amount,
+      category,
+      situation,
+      title: result.title,
+      subtitle: result.subtitle,
+      date: new Date().toISOString(),
+    };
+
+    setSavedRecords((prev) => [newItem, ...prev]);
+  }
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#ffe9f2,_#fff7fb_38%,_#f6f3ff_76%,_#f5f5f7_100%)] px-4 py-6 text-zinc-900 md:py-10">
@@ -400,11 +425,11 @@ function App() {
 
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <button
-                    onClick={() => setStep("input")}
+                    onClick={handleSave}
                     className="h-12 rounded-2xl bg-zinc-100 text-zinc-900 transition hover:bg-zinc-200"
                     type="button"
                   >
-                    다시 입력
+                    이 문장 저장하기
                   </button>
                   <button
                     className="h-12 rounded-2xl bg-zinc-950 text-white transition hover:opacity-95"
@@ -412,6 +437,44 @@ function App() {
                   >
                     공유하기
                   </button>
+                </div>
+              </div>
+            </CardBox>
+
+            <CardBox>
+              <div className="p-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs text-zinc-500">최근 저장한 결과</div>
+                    <div className="mt-1 text-sm font-semibold">결과 보관함</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-zinc-500">저장 수</div>
+                    <div className="mt-1 text-sm font-semibold">
+                      {savedRecords.length}개
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {savedRecords.slice(0, 5).map((item) => (
+                    <div
+                      key={item.id}
+                      className="rounded-2xl border border-zinc-100 bg-zinc-50 p-4"
+                    >
+                      <div className="text-sm font-medium leading-6 text-zinc-900">
+                        {item.title}
+                      </div>
+                      <div className="mt-1 text-xs leading-5 text-zinc-500">
+                        {item.subtitle}
+                      </div>
+                      <div className="mt-2 text-[11px] text-zinc-400">
+                        {pickCategoryLabel(item.category)} ·{" "}
+                        {Number(item.amount || 0).toLocaleString("ko-KR")}원 ·{" "}
+                        {item.situation}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardBox>
