@@ -1,2 +1,5 @@
 export default function ViralMVP() {
-  export default ViralMVP;
+  return (
+    <div>...</div>
+  );
+}
