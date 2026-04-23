@@ -2,23 +2,6 @@ import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Coffee, MessageCircleHeart, Share2, Sparkles, Store, UtensilsCrossed, Wallet } from "lucide-react";
 
-type Step = "hero" | "input" | "result";
-type Reaction = "up" | "down" | null;
-
-type RecordItem = {
-  id: number;
-  amount: string;
-  category: string;
-  situation: string;
-  title: string;
-  date: string;
-};
-
-type LinePack = {
-  title: string;
-  subtitle: string;
-};
-
 const categories = [
   { value: "cafe", label: "카페", icon: Coffee },
   { value: "food", label: "식사/배달", icon: UtensilsCrossed },
@@ -28,7 +11,7 @@ const categories = [
 
 const situations = ["혼자", "친구와", "스트레스", "심심함", "보상 심리"];
 
-const lineLibrary: Record<string, LinePack[]> = {
+const lineLibrary = {
   "cafe|혼자": [
     { title: "버티려고 들어갔는데, 생각보다 오래 있었다", subtitle: "혼자 있는 시간이 필요했던 날은 커피보다 자리가 더 중요했다." },
     { title: "집에 가기 싫어서 들어간 건데, 나올 이유도 없었다", subtitle: "목적이 있는 소비라기보다 잠깐 기대고 싶은 마음에 가까웠다." },
@@ -61,29 +44,30 @@ const lineLibrary: Record<string, LinePack[]> = {
   ],
 };
 
-function pickCategoryLabel(value: string) {
-  return categories.find((c) => c.value === value)?.label ?? value;
+function pickCategoryLabel(value) {
+  const found = categories.find((c) => c.value === value);
+  return found ? found.label : value;
 }
 
-function buildResult(category: string, situation: string, amount: string): LinePack {
+function buildResult(category, situation, amount) {
   const key = `${category}|${situation}`;
-  const pool = lineLibrary[key] ?? lineLibrary.fallback;
+  const pool = lineLibrary[key] || lineLibrary.fallback;
   const numeric = Number(amount || 0);
   const index = Math.abs((numeric || 1) + key.length) % pool.length;
   return pool[index];
 }
 
-function CardBox({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function CardBox({ children, className = "" }) {
   return <div className={`rounded-[28px] border border-white/40 bg-white/85 shadow-lg backdrop-blur ${className}`}>{children}</div>;
 }
 
-export default function ViralMVP() {
-  const [step, setStep] = useState<Step>("hero");
+export default function App() {
+  const [step, setStep] = useState("hero");
   const [amount, setAmount] = useState("5500");
   const [category, setCategory] = useState("cafe");
   const [situation, setSituation] = useState("혼자");
-  const [reacted, setReacted] = useState<Reaction>(null);
-  const [savedRecords, setSavedRecords] = useState<RecordItem[]>([
+  const [reacted, setReacted] = useState(null);
+  const [savedRecords, setSavedRecords] = useState([
     {
       id: 1,
       amount: "5500",
@@ -95,7 +79,7 @@ export default function ViralMVP() {
   ]);
 
   const result = useMemo(() => buildResult(category, situation, amount), [category, situation, amount]);
-  const CategoryIcon = categories.find((c) => c.value === category)?.icon ?? Coffee;
+  const CategoryIcon = (categories.find((c) => c.value === category) || { icon: Coffee }).icon;
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#ffe9f2,_#fff7fb_38%,_#f6f3ff_76%,_#f5f5f7_100%)] px-4 py-6 text-zinc-900 md:py-10">
