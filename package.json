@@ -1,18 +1,15 @@
 {
-  "name": "spend-story-final-ready",
+  "name": "spend-story-clean",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build"
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "framer-motion": "^10.18.0",
-    "lucide-react": "^0.378.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "vite": "^5.4.10",
