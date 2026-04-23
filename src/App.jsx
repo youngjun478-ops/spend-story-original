@@ -220,6 +220,13 @@ function App() {
     };
 
     setSavedRecords((prev) => [newItem, ...prev]);
+    setReacted(null);
+    setStep("input");
+  }
+
+  function handleBackToInput() {
+    setReacted(null);
+    setStep("input");
   }
 
   return (
@@ -425,17 +432,18 @@ function App() {
 
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <button
-                    onClick={handleSave}
+                    onClick={handleBackToInput}
                     className="h-12 rounded-2xl bg-zinc-100 text-zinc-900 transition hover:bg-zinc-200"
                     type="button"
                   >
-                    이 문장 저장하기
+                    다시 입력하기
                   </button>
                   <button
+                    onClick={handleSave}
                     className="h-12 rounded-2xl bg-zinc-950 text-white transition hover:opacity-95"
                     type="button"
                   >
-                    공유하기
+                    이 문장 저장하기
                   </button>
                 </div>
               </div>
